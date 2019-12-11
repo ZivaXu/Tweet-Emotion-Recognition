@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 
 import keys as keys     # file for api keys
-import twitter
+import twitter      # A Python wrapper around the Twitter API.
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
