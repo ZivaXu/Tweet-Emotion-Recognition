@@ -1,3 +1,6 @@
+### HCDE 310 - Final Project: Tweet Emotion Recognition
+### Linda Lai, Ziva Xu
+
 import webapp2, os, urllib2, json, jinja2, logging
 from ibm_watson import ToneAnalyzerV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -8,14 +11,17 @@ import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
 
+import keys as keys     # file for api keys
+import twitter
+
+
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
                                        extensions=['jinja2.ext.autoescape'],
                                        autoescape=True)
 
-
+# Utility functions you may want to use
 def pretty(obj):
     return json.dumps(obj, sort_keys=True, indent=2)
-
 
 def safeGet(url):  # not currently being used
     try:
@@ -28,13 +34,34 @@ def safeGet(url):  # not currently being used
         logging.error("Reason: ", e.reason)
     return None
 
+# fetch tweet data from twitter api
+import keys as keys     # file for api keys
+import twitter
+
+ACCESS_TOKEN = keys.ACCESS_TOKEN
+ACCESS_SECRET = keys.ACCESS_SECRET
+CONSUMER_KEY = keys.CONSUMER_KEY
+CONSUMER_SECRET = keys.CONSUMER_SECRET
+
+t = twitter.Api(consumer_key=CONSUMER_KEY,
+                consumer_secret=CONSUMER_SECRET,
+                access_token_key=ACCESS_TOKEN,
+                access_token_secret=ACCESS_SECRET)
+results = t.GetSearch(raw_query="q=from%3AGalarnykMichael&src=typd")
+print(results)
+
+
+
+
 
 # analyze the tone of the given text
-watson_api = 'bw2x1nRlZqljWVgB7oPistFTRzsM1Evwh18R9jE8DebZ'
+watson_api = keys.WATSON_API
 
-
-def tone_analyzer(tone_input, url="https://gateway.watsonplatform.net/tone-analyzer/api",
-                  content_type="application/json", sentences=False):
+def tone_analyzer(tone_input,
+    url="https://gateway.watsonplatform.net/tone-analyzer/api",
+    content_type="application/json",
+    sentences=False
+    ):
     authenticator = IAMAuthenticator(watson_api)
     tone_analyzer = ToneAnalyzerV3(version='2017-09-21', authenticator=authenticator)
     tone_analyzer.set_service_url(url)
