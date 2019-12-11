@@ -35,21 +35,26 @@ def safeGet(url):  # not currently being used
     return None
 
 # fetch tweet data from twitter api
-import keys as keys     # file for api keys
-import twitter
-
-ACCESS_TOKEN = keys.ACCESS_TOKEN
-ACCESS_SECRET = keys.ACCESS_SECRET
-CONSUMER_KEY = keys.CONSUMER_KEY
-CONSUMER_SECRET = keys.CONSUMER_SECRET
-
-t = twitter.Api(consumer_key=CONSUMER_KEY,
-                consumer_secret=CONSUMER_SECRET,
-                access_token_key=ACCESS_TOKEN,
-                access_token_secret=ACCESS_SECRET)
-results = t.GetSearch(raw_query="q=from%3AGalarnykMichael&src=typd")
-print(results)
-
+def tweets_search(ACCESS_TOKEN = keys.ACCESS_TOKEN,
+    ACCESS_SECRET = keys.ACCESS_SECRET,
+    CONSUMER_KEY = keys.CONSUMER_KEY,
+    CONSUMER_SECRET = keys.CONSUMER_SECRET,
+    params = {},
+    q = '#ThrowbackThursday',
+    result_type = 'recent',
+    count = '100'):
+    params['q'] = q
+    params['result_type'] = result_type
+    params['count'] = count
+    query = urllib.urlencode(params)
+    api = twitter.Api(consumer_key=CONSUMER_KEY,
+        consumer_secret=CONSUMER_SECRET,
+        access_token_key=ACCESS_TOKEN,
+        access_token_secret=ACCESS_SECRET)
+    print(query)
+    results = twitter_api.GetSearch(raw_query=query)
+    return results
+    # add error catching later
 
 
 
@@ -93,10 +98,10 @@ def create_plot_one(): # this isn't final, just a sample call of the bar graph
     return graphJSON
 
 
-def create_plot_two():
+# def create_plot_two():
 
 
-
+###############
 class MainHandler(webapp2.RequestHandler):
     def genpage(self, tag="northcascades"):
         plot_one = create_plot_one()
