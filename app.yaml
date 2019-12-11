@@ -2,6 +2,7 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+handlers:
 - url: .*
   script: main.application
 
@@ -10,11 +11,5 @@ libraries:
   version: latest
 - name: jinja2
   version: latest
-- name: twitter
-  version: latest
-- name: plotly
-  version: latest
-- name: pandas
-  version: latest
-- name: numpy
+- name: ssl
   version: latest

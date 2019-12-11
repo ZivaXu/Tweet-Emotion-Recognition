@@ -11,43 +11,52 @@
 			.form-control:focus {
   				box-shadow: none;
 			}
+			#tag {
+				width: 100%;
+			}
 		</style>
 	</head>
 
 	<body>
-		<h1 class="mt-5">Tweet Emotion Recognition</h1>
-		<h1 class="mt-5">Results for {{ }}</h1>
+		<h1 class="mt-5 ml-5">Tweet Emotion Recognition</h1>
+		<h3 class="mt-5 ml-5">Results for {{tag}}</h3>
 
 		<!--A styled search bar hehehe-->
-		<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+		<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 ml-5">
 			<div class="input-group">
-				<input type="text" placeholder="Name of hashtag..." aria-describedby="button-addon1" class="form-control border-0 bg-light" id="tag">
+				<input type="text" placeholder="Search by hashtag... eg.#UW" aria-describedby="button-addon1" class="form-control border-0 bg-light" id="tag">
               	<div class="input-group-append">
                 	<button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
               	</div>
             </div>
 		</div>
 
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6">
-					<div class="chart" id="graph-one">
-						<script>
-							// from what I read on the internet, | safe has to be there!
-							var graphs = {{plot_one | safe}};
-							Plotly.plot('graph-one',graphs,{});
-						</script>
-					</div>
 
-					<div class="chart" id="graph-two">
-						<script>
-							var graphs = {{plot_two | safe}};
-							Plotly.plot('graph-two',graphs,{});
-						</script>
-					</div>
-				</div>
-			</div>
-		</div>
+		<!--to test the data processing functions: displaying the pure output before plotting-->
+		<p>{{output}}</p>
+
+
+		<!--two charts-->
+<!--		<div class="container">-->
+<!--			<div class="row">-->
+<!--				<div class="col-md-6">-->
+<!--					<div class="chart" id="graph-one">-->
+<!--						<script>-->
+<!--							// from what I read on the internet, | safe has to be there!-->
+<!--							var graphs = {{plot_one | safe}};-->
+<!--							Plotly.plot('graph-one',graphs,{});-->
+<!--						</script>-->
+<!--					</div>-->
+
+<!--					<div class="chart" id="graph-two">-->
+<!--						<script>-->
+<!--							var graphs = {{plot_two | safe}};-->
+<!--							Plotly.plot('graph-two',graphs,{});-->
+<!--						</script>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</div>-->
 
 		<footer class="footer">
       		<div class="container">

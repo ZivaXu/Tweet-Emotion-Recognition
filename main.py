@@ -97,19 +97,19 @@ def tone_analyzer(tone_input,
         return None
 
 
-def create_plot_one(): # this isn't final, just a sample call of the bar graph
-    N = 40
-    x = np.linspace(0, 1, N)
-    y = np.random.randn(N)
-    df = pd.DataFrame({'x': x, 'y': y}) # creating a sample dataframe
-    data = [
-        go.Bar(
-            x=df['x'], # assign x as the dataframe column 'x'
-            y=df['y']
-        )
-    ]
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+# def create_plot_one(): # this isn't final, just a sample call of the bar graph
+#     N = 40
+#     x = np.linspace(0, 1, N)
+#     y = np.random.randn(N)
+#     df = pd.DataFrame({'x': x, 'y': y}) # creating a sample dataframe
+#     data = [
+#         go.Bar(
+#             x=df['x'], # assign x as the dataframe column 'x'
+#             y=df['y']
+#         )
+#     ]
+#     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+#     return graphJSON
 
 
 # def create_plot_two():
@@ -122,13 +122,14 @@ class MainHandler(webapp2.RequestHandler):
             tag = "#" + tag     # make sure its a valid tag
         tweets_data = tweets_search(q=tag)
         combined_tweets = tweets_combine(tweets_data)
-        tone_analyzer(combined_tweets)
+        output = tone_analyzer(combined_tweets)
         # not sure what type of data the function tone_analyzer returns
-
-        plot_one = create_plot_one()
-        plot_two = create_plot_two()
-
-        tvals = {'tag': tag, 'plot_one': plot_one, 'plot_two': plot_two}
+        #
+        # plot_one = create_plot_one()
+        # plot_two = create_plot_two()
+        #
+        # tvals = {'tag': tag, 'plot_one': plot_one, 'plot_two': plot_two}
+        tvals = {'tag': tag, 'output': output}
         template = JINJA_ENVIRONMENT.get_template('template.html')
         self.response.write(template.render(tvals))
 
