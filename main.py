@@ -142,7 +142,8 @@ class MainHandler(webapp2.RequestHandler):
             tag = "#" + tag     # make sure its a valid tag
         tweets_data = tweets_search(q=tag)
 
-        combined_emotions_10 = tweets_emotions_combine(tweets_data[0:10])
+        combined_emotions_10 = tweets_emotions_combine(tweets_data[0:20])
+
         output_two = create_plot_two(combined_emotions_10)
 
         # combined_emotions_all = tweets_emotions_combine(tweets_data)

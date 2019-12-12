@@ -24,11 +24,12 @@
 		<h3 class="mt-5 ml-5">Results for {{tagname}}</h3>
 
 		<!--A styled search bar hehehe-->
-		<div class="mt-5 ml-5">
-			<form class="form-inline md-form mr-auto mb-4" action="/" method="post">
-			  <input class="form-control mr-lg-5" type="text" placeholder="Search by hashtag... eg.#UW" id="tag" name="tag">
-			  <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
+		<div class="mt-5 ml-5 mb-3">
+			<form class="form-inline md-form mr-auto mb-1" action="/" method="post">
+				<input class="form-control mr-lg-5" type="text" placeholder="Search by hashtag... eg.#UW" id="tag" name="tag">
+				<button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
 			</form>
+			<span class="muted small font-weight-light">The average waiting time is about 35 seconds, thank you for your patience.</span>
 		</div>
 
 
@@ -85,7 +86,6 @@
 				options: {title: {display: true, text: 'Probabilities of Emotions Presented in Recent 20 Tweets'},responsive: true}
 			});
 		</script>
-
 
 	</body>
 </html>
