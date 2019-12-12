@@ -2,14 +2,16 @@
 ### authors: Linda Lai, Ziva Xu
 
 import webapp2, os, urllib2, json, jinja2, logging, urllib
-from ibm_watson import ToneAnalyzerV3
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-from ibm_watson import ApiException
+
 
 import plotly
 import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
+
+
+import paralleldots
+
 
 import keys as keys     # file for api keys
 import twitter      # A Python wrapper around the Twitter API.
@@ -19,9 +21,11 @@ JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.di
                                        extensions=['jinja2.ext.autoescape'],
                                        autoescape=True)
 
+
 # Utility functions you may want to use
 def pretty(obj):
     return json.dumps(obj, sort_keys=True, indent=2)
+
 
 def safeGet(url):  # not currently being used
     try:
@@ -65,36 +69,11 @@ def tweets_search(ACCESS_TOKEN = keys.ACCESS_TOKEN,
 # combine all the tweets text into one string
 # Returns a string (that will be processed with function tone_analyzer)
 def tweets_combine(tweets):
-    combined_string = tweets
+    combined_string = []
     for each_tweet in tweets:
         tweet_text = each_tweet.text
-        combined_string = combined_string + tweet_text + ".\n"
+        combined_string.append(str(tweet_text))
     return combined_string
-
-
-
-# analyze the tone of the given text
-watson_api = keys.WATSON_API
-
-def tone_analyzer(tone_input,
-    url="https://gateway.watsonplatform.net/tone-analyzer/api",
-    content_type="application/json",
-    sentences=False
-    ):
-    authenticator = IAMAuthenticator(watson_api)
-    tone_analyzer = ToneAnalyzerV3(version='2017-09-21', authenticator=authenticator)
-    tone_analyzer.set_service_url(url)
-    text = tone_input
-    try:
-        return tone_analyzer.tone({'text': text}, content_type=content_type, sentences=sentences).get_result()
-    except ApiException as ex:
-        if hasattr(ex, "code"):
-            logging.error("The server couldn't fulfill the request.")
-            logging.error("Error code: ", ex.code)
-        elif hasattr(ex, 'reason'):
-            logging.error("We failed to reach a server")
-            logging.error("Reason: ", ex.message)
-        return None
 
 
 # def create_plot_one(): # this isn't final, just a sample call of the bar graph
@@ -122,7 +101,7 @@ class MainHandler(webapp2.RequestHandler):
             tag = "#" + tag     # make sure its a valid tag
         tweets_data = tweets_search(q=tag)
         combined_tweets = tweets_combine(tweets_data)
-        output = tone_analyzer(combined_tweets)
+        output = paralleldots.batch_emotion(combined_tweets)["emotion"]
         # not sure what type of data the function tone_analyzer returns
         #
         # plot_one = create_plot_one()
