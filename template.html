@@ -35,10 +35,10 @@
 		<div class="container ml-1">
 			<div class="row">
 				<div class="col-md-5 mt-2 ml-4">
-					<canvas id="barChart" style="display: block; height: 245px; width: 500px;"></canvas>
+					<canvas id="barChart"></canvas>
 				</div>
 				<div class="col-md-5 mt-2 ml-4">
-					<canvas id="lineChart" style="display: block; height: 245px; width: 500px;"></canvas>
+					<canvas id="lineChart"></canvas>
 				</div>
 			</div>
 		</div>
@@ -71,6 +71,8 @@
 				},
 				options: {title: {display: true, text: 'Average Probabilities of Recent Tweet Emotion'},scales: {yAxes: [{ticks: {beginAtZero: true}}]}}
 			});
+			ctxB.canvas.width = 920;
+			ctxB.canvas.height = 451;
 
 			//line
 			var ctxL = document.getElementById("lineChart").getContext('2d');
@@ -84,6 +86,8 @@
 				},
 				options: {title: {display: true, text: 'Probabilities of Emotions Presented in Recent 20 Tweets'},responsive: true}
 			});
+			ctxL.canvas.width = 920;
+			ctxL.canvas.height = 451;
 		</script>
 
 
