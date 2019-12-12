@@ -5,7 +5,6 @@ import webapp2, os, urllib2, json, jinja2, logging, urllib
 # from django.utils.encoding import smart_str, smart_unicode
 
 import requests
-api_key = "e1pNeA7xCEAKhZoFF7w7RvArWVq0EOVvMxAJgA88UVc"
 
 
 import keys as keys     # file for api keys
@@ -71,10 +70,16 @@ def tweets_combine(tweets):
     return combined_string
 
 
-# def create_plot_one():
+# def create_plot_one_data(tag): # compose an average score for all the recent tweets
+def create_plot_two(str_list): # compose a trend for each tweet + each emotion
+    json_res = requests.post("https://apis.paralleldots.com/v5/emotion_batch", data={"api_key": keys.pd_api_key, "text": str_list}).json()["emotion"]
 
+    output_list = [{"label": "Happy", "data": [], "backgroundColor": ['rgba(255, 206, 86, 0.2)', ],"borderColor": ['rgba(255, 206, 86, 1)', ], "borderWidth": 2}, {"label": "Sad", "data": [], "backgroundColor": ['rgba(54, 162, 235, 0.2)', ], "borderColor": ['rgba(54, 162, 235, 1)', ], "borderWidth": 2},{"label": "Angry", "data": [], "backgroundColor": ['rgba(255, 99, 132, 0.2)', ], "borderColor": ['rgba(255, 99, 132, 1)', ], "borderWidth": 2},{"label": "Fear", "data": [], "backgroundColor": ['rgba(105, 0, 132, .2)', ], "borderColor": ['rgba(200, 99, 132, .7)', ], "borderWidth": 2}, {"label": "Excited", "data": [], "backgroundColor": ['rgba(255, 159, 64, 0.2)', ], "borderColor": ['rgba(255, 159, 64, 1)', ], "borderWidth": 2}, {"label": "Indifferent", "data": [], "backgroundColor": ['rgba(0, 137, 132, .2)', ], "borderColor": ['rgba(0, 10, 130, .7)', ], "borderWidth": 2}]
 
-# def create_plot_two():
+    for emo_data in output_list:
+        for tweet_info in json_res:
+            emo_data["data"].append(tweet_info[emo_data["label"].lower()])
+    return output_list
 
 
 ###############
@@ -84,16 +89,12 @@ class MainHandler(webapp2.RequestHandler):
             tag = "#" + tag     # make sure its a valid tag
         tweets_data = tweets_search(q=tag)
         combined_tweets = tweets_combine(tweets_data)
-        text = "{}".format(combined_tweets[0:5])
-        output = requests.post("https://apis.paralleldots.com/v5/emotion_batch", data={"api_key": api_key, "text": text}).json()
+        str_list = "{}".format(combined_tweets[0:5])
 
-        # not sure what type of data the function tone_analyzer returns
-        #
-        # plot_one = create_plot_one()
-        # plot_two = create_plot_two()
-        #
+        output_two = create_plot_two(str_list)
+
         # tvals = {'tag': tag, 'plot_one': plot_one, 'plot_two': plot_two}
-        tvals = {'tagname': tag, 'output': output}
+        tvals = {'tagname': tag, 'outputTwo': output_two}
         template = JINJA_ENVIRONMENT.get_template('template.html')
         self.response.write(template.render(tvals))
 

@@ -10,6 +10,13 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Material Design Bootstrap -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
+		<style>
+			#tag {
+				display: flex;
+    			flex-grow: 1;
+    			max-width: 500px;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -19,7 +26,7 @@
 		<!--A styled search bar hehehe-->
 		<div class="mt-5 ml-5">
 			<form class="form-inline md-form mr-auto mb-4" action="/" method="post">
-			  <input class="form-control mr-sm-2" type="text" placeholder="Search by hashtag... eg.#UW" id="tag" name="tag">
+			  <input class="form-control mr-lg-5" type="text" placeholder="Search by hashtag... eg.#UW" id="tag" name="tag">
 			  <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
 			</form>
 		</div>
@@ -29,36 +36,14 @@
 		<p class="mt-5 ml-5">{{output}}</p>
 
 		<div class="col-md-5 mt-5 ml-5">
-			<canvas id="myChart"></canvas>
+			<canvas id="lineChart"></canvas>
 		</div>
 
-		<!--two charts-->
-<!--		<div class="container">-->
-<!--			<div class="row">-->
-<!--				<div class="col-md-6">-->
-<!--					<div class="chart" id="graph-one">-->
-<!--						<script>-->
-<!--							// from what I read on the internet, | safe has to be there!-->
-<!--							var graphs = {{plot_one | safe}};-->
-<!--							Plotly.plot('graph-one',graphs,{});-->
-<!--						</script>-->
-<!--					</div>-->
-
-<!--					<div class="chart" id="graph-two">-->
-<!--						<script>-->
-<!--							var graphs = {{plot_two | safe}};-->
-<!--							Plotly.plot('graph-two',graphs,{});-->
-<!--						</script>-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-
 		<footer class="footer">
-      		<div class="container">
-        		<span class="text-muted">Made with <i class="icon-coffee"></i><i class="icon-heart-empty"></i> by Linda Lai & Ziva Xu</span>
+      		<div class="mt-5 ml-5">
+        		<span class="text-muted">Made with <i class="fas fa-heart" style="color: Tomato;"></i>&nbsp;<i class="fas fa-mug-hot"></i>&nbsp;&nbsp;by Linda Lai & Ziva Xu</span>
       		</div>
-    	</footer>>
+    	</footer>
 		<!-- JQuery -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<!-- Bootstrap tooltips -->
@@ -68,42 +53,16 @@
 		<!-- MDB core JavaScript -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
 		<script type="text/javascript">
-			var ctx = document.getElementById("myChart").getContext('2d');
-			var myChart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-			labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-			datasets: [{
-			label: '# of Votes',
-			data: [12, 19, 3, 5, 2, 3],
-			backgroundColor: [
-			'rgba(255, 99, 132, 0.2)',
-			'rgba(54, 162, 235, 0.2)',
-			'rgba(255, 206, 86, 0.2)',
-			'rgba(75, 192, 192, 0.2)',
-			'rgba(153, 102, 255, 0.2)',
-			'rgba(255, 159, 64, 0.2)'
-			],
-			borderColor: [
-			'rgba(255,99,132,1)',
-			'rgba(54, 162, 235, 1)',
-			'rgba(255, 206, 86, 1)',
-			'rgba(75, 192, 192, 1)',
-			'rgba(153, 102, 255, 1)',
-			'rgba(255, 159, 64, 1)'
-			],
-			borderWidth: 1
-			}]
-			},
-			options: {
-			scales: {
-			yAxes: [{
-			ticks: {
-			beginAtZero: true
-			}
-			}]
-			}
-			}
+			//line
+			var ctxL = document.getElementById("lineChart").getContext('2d');
+			var output = JSON.parse(JSON.stringify({{ outputTwo | safe }}));
+			var myLineChart = new Chart(ctxL, {
+				type: 'line',
+				data: {
+					labels: ["T1", "T2", "T3", "T4", "T5"],
+					datasets: output
+				},
+				options: {responsive: true}
 			});
 		</script>
 
