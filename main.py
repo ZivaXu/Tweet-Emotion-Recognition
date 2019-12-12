@@ -2,15 +2,10 @@
 ### authors: Linda Lai, Ziva Xu
 
 import webapp2, os, urllib2, json, jinja2, logging, urllib
+# from django.utils.encoding import smart_str, smart_unicode
 
-
-import plotly
-import plotly.graph_objs as go
-import pandas as pd
-import numpy as np
-
-
-import paralleldots
+import requests
+api_key = "e1pNeA7xCEAKhZoFF7w7RvArWVq0EOVvMxAJgA88UVc"
 
 
 import keys as keys     # file for api keys
@@ -72,23 +67,11 @@ def tweets_combine(tweets):
     combined_string = []
     for each_tweet in tweets:
         tweet_text = each_tweet.text
-        combined_string.append(str(tweet_text))
+        combined_string.append(str(tweet_text.encode(errors='ignore').decode('utf-8')))
     return combined_string
 
 
-# def create_plot_one(): # this isn't final, just a sample call of the bar graph
-#     N = 40
-#     x = np.linspace(0, 1, N)
-#     y = np.random.randn(N)
-#     df = pd.DataFrame({'x': x, 'y': y}) # creating a sample dataframe
-#     data = [
-#         go.Bar(
-#             x=df['x'], # assign x as the dataframe column 'x'
-#             y=df['y']
-#         )
-#     ]
-#     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
-#     return graphJSON
+# def create_plot_one():
 
 
 # def create_plot_two():
@@ -101,14 +84,16 @@ class MainHandler(webapp2.RequestHandler):
             tag = "#" + tag     # make sure its a valid tag
         tweets_data = tweets_search(q=tag)
         combined_tweets = tweets_combine(tweets_data)
-        output = paralleldots.batch_emotion(combined_tweets)["emotion"]
+        text = "{}".format(combined_tweets[0:5])
+        output = requests.post("https://apis.paralleldots.com/v5/emotion_batch", data={"api_key": api_key, "text": text}).json()
+
         # not sure what type of data the function tone_analyzer returns
         #
         # plot_one = create_plot_one()
         # plot_two = create_plot_two()
         #
         # tvals = {'tag': tag, 'plot_one': plot_one, 'plot_two': plot_two}
-        tvals = {'tag': tag, 'output': output}
+        tvals = {'tagname': tag, 'output': output}
         template = JINJA_ENVIRONMENT.get_template('template.html')
         self.response.write(template.render(tvals))
 

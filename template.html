@@ -14,18 +14,23 @@
 
 	<body>
 		<h1 class="mt-5 ml-5">Tweet Emotion Recognition</h1>
-		<h3 class="mt-5 ml-5">Results for {{tag}}</h3>
+		<h3 class="mt-5 ml-5">Results for {{tagname}}</h3>
 
 		<!--A styled search bar hehehe-->
-		<form class="form-inline md-form mr-auto mb-4">
-		  <input class="form-control mr-sm-2" type="text" placeholder="Search by hashtag... eg.#UW" aria-label="Search" id="tag">
-		  <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
-		</form>
+		<div class="mt-5 ml-5">
+			<form class="form-inline md-form mr-auto mb-4" action="/" method="post">
+			  <input class="form-control mr-sm-2" type="text" placeholder="Search by hashtag... eg.#UW" id="tag" name="tag">
+			  <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
+			</form>
+		</div>
 
 
 		<!--to test the data processing functions: displaying the pure output before plotting-->
-		<p>{{output}}</p>
+		<p class="mt-5 ml-5">{{output}}</p>
 
+		<div class="col-md-5 mt-5 ml-5">
+			<canvas id="myChart"></canvas>
+		</div>
 
 		<!--two charts-->
 <!--		<div class="container">-->
@@ -62,8 +67,46 @@
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 		<!-- MDB core JavaScript -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
-		<!--for plotly support-->
-		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+		<script type="text/javascript">
+			var ctx = document.getElementById("myChart").getContext('2d');
+			var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+			labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+			datasets: [{
+			label: '# of Votes',
+			data: [12, 19, 3, 5, 2, 3],
+			backgroundColor: [
+			'rgba(255, 99, 132, 0.2)',
+			'rgba(54, 162, 235, 0.2)',
+			'rgba(255, 206, 86, 0.2)',
+			'rgba(75, 192, 192, 0.2)',
+			'rgba(153, 102, 255, 0.2)',
+			'rgba(255, 159, 64, 0.2)'
+			],
+			borderColor: [
+			'rgba(255,99,132,1)',
+			'rgba(54, 162, 235, 1)',
+			'rgba(255, 206, 86, 1)',
+			'rgba(75, 192, 192, 1)',
+			'rgba(153, 102, 255, 1)',
+			'rgba(255, 159, 64, 1)'
+			],
+			borderWidth: 1
+			}]
+			},
+			options: {
+			scales: {
+			yAxes: [{
+			ticks: {
+			beginAtZero: true
+			}
+			}]
+			}
+			}
+			});
+		</script>
+
+
 	</body>
 </html>
