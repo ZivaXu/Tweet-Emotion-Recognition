@@ -31,17 +31,13 @@
 			</form>
 		</div>
 
-
-		<!--to test the data processing functions: displaying the pure output before plotting-->
-		<p class="mt-5 ml-5">{{output}}</p>
-
 		<div class="col-md-5 mt-5 ml-5">
 			<canvas id="lineChart"></canvas>
 		</div>
 
 		<footer class="footer">
       		<div class="mt-5 ml-5">
-        		<span class="text-muted">Made with <i class="fas fa-heart" style="color: Tomato;"></i>&nbsp;<i class="fas fa-mug-hot"></i>&nbsp;&nbsp;by Linda Lai & Ziva Xu</span>
+        		<span class="text-muted">Made with <i class="fas fa-heart" style="color: Tomato;"></i>&nbsp;<i class="fas fa-mug-hot" style="color: #6f4e37;"></i>&nbsp;&nbsp;by Linda Lai & Ziva Xu</span>
       		</div>
     	</footer>
 		<!-- JQuery -->
@@ -55,12 +51,13 @@
 		<script type="text/javascript">
 			//line
 			var ctxL = document.getElementById("lineChart").getContext('2d');
-			var output = JSON.parse(JSON.stringify({{ outputTwo | safe }}));
+			var outputtwo = JSON.parse(JSON.stringify({{ outputTwo | safe }}));
+			var twolength = new Array({{ outputTwoLength | safe }});
 			var myLineChart = new Chart(ctxL, {
 				type: 'line',
 				data: {
-					labels: ["T1", "T2", "T3", "T4", "T5"],
-					datasets: output
+					labels: twolength,
+					datasets: outputtwo
 				},
 				options: {responsive: true}
 			});
