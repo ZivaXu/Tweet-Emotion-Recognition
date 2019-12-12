@@ -58,13 +58,14 @@
 			var ctxB = document.getElementById("barChart").getContext('2d');
 			// var emotions = {{ emotionLabels | safe }};
 			// var oneData = {{dataOne | safe }};
+			var dataOne = JSON.parse(JSON.stringify({{ dataOne | safe }}));
 			var myBarChart = new Chart(ctxB, {
 				type: 'bar',
 				data: {
-					labels: '{{ emotionLabels | safe }}',
-					datasets: '{{dataOne | safe }}'
+					labels: {{ emotionLabels | safe }},
+					datasets: dataOne
 				},
-				options: {scales: {yAxes: [{ticks: {beginAtZero: true}}]}}
+				options: {title: {display: true, text: 'Average Probabilities of Recent Tweet Emotion'},scales: {yAxes: [{ticks: {beginAtZero: true}}]}}
 			});
 
 			//line
@@ -77,7 +78,7 @@
 					labels: twolength,
 					datasets: outputtwo
 				},
-				options: {responsive: true}
+				options: {title: {display: true, text: 'Probabilities of Emotions Presented in Recent 20 Tweets'},responsive: true}
 			});
 		</script>
 

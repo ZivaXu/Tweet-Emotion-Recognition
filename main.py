@@ -62,9 +62,12 @@ def tweets_search(ACCESS_TOKEN = keys.ACCESS_TOKEN,
 
 def fetch_each_tweet_emotion(tweet):
     # response = requests.post("https://apis.paralleldots.com/v5/emotion", data={"api_key": keys.pd_api_key, "text": tweet})
-    response = requests.post("https://apis.paralleldots.com/v5/emotion", data={"api_key": keys.pd_api_key, "text": tweet}).json()["emotion"]
+    response = requests.post("https://apis.paralleldots.com/v5/emotion", data={"api_key": keys.pd_api_key, "text": tweet}).json()
+    logging.info(tweet)
     # output = json.load(response)["emotion"]
-    return response
+    print(response)
+    output = response["emotion"]
+    return output
 
 
 # combine all the emotions of tweets into one list returns: [{'happy': 0.001115, 'sad': 0.015291, 'angry': 0.002552,
@@ -83,11 +86,15 @@ def tweets_emotions_combine(tweets):
 # returns a dictionary of the average emotion scores of all tweets about one hashtag:
 # {'happy': 0.001115, 'sad': 0.015291, 'angry': 0.002552, 'fear': 0.003962, 'excited': 0.003927, 'indifferent': 0.973152}
 def tweets_average_emotions(combined_emotions):
-    average = combined_emotions[0]
-    average_keys = average.keys()
-    for each_dict in combined_emotions[1:]:
-        for average_k in average_keys:
-            average[average_k] = (average[average_k] + each_dict[average_k]) / 2
+    if len(combined_emotions) > 0:
+        average = combined_emotions[0]
+        average_keys = average.keys()
+        for each_dict in combined_emotions[1:]:
+            for average_k in average_keys:
+                average[average_k] = (average[average_k] + each_dict[average_k]) / 2
+    else:
+        average = {'happy': 0, 'sad': 0, 'angry': 0, 'fear': 0, 'excited': 0, 'indifferent': 0}
+
     return average
 
 
@@ -95,7 +102,7 @@ def tweets_average_emotions(combined_emotions):
 def create_plot_one(average_emotions, emotion_labels):
     data = []
     for emotion in emotion_labels:
-        data.append(average_emotions[emotion])
+        data.append(average_emotions[emotion.lower()])
     output_dataset = [{"label": 'probabilities',
                        "data": data,
                        "backgroundColor": ['rgba(255, 99, 132, 0.2)',
@@ -138,7 +145,7 @@ class MainHandler(webapp2.RequestHandler):
         combined_emotions_10 = tweets_emotions_combine(tweets_data[0:10])
         output_two = create_plot_two(combined_emotions_10)
 
-        combined_emotions_all = tweets_emotions_combine(tweets_data)
+        # combined_emotions_all = tweets_emotions_combine(tweets_data)
         emotion_labels = ["Happy", "Sad", "Angry", "Fear", "Excited", "Indifferent"]
         data_one = create_plot_one(tweets_average_emotions(combined_emotions_10), emotion_labels)
 
